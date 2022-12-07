@@ -81,13 +81,19 @@ function createTimeOutEvent(empObj, dateStamp){
     return empObj
 }
 
-function hoursWorkedOnDate(empObj, date){
-    let timeInObj = createTimeInEvent(empObj, date);
-    let timeOutObj = createTimeOutEvent(empObj, date);
-    let timeOutHrs = timeOutObj.timeOutEvents[0].hour;
-    let timeInHrs = timeInObj.timeInEvents[0].hour;
-    return (timeOutHrs -timeInHrs)/100
-}
+// function hoursWorkedOnDate(empObj, date){
+//     let timeInObj = createTimeInEvent(empObj, date);
+//     let timeOutObj = createTimeOutEvent(empObj, date);
+//     let timeOutHrs = timeOutObj.timeOutEvents[0].hour;
+//     let timeInHrs = timeInObj.timeInEvents[0].hour;
+//     return (timeOutHrs -timeInHrs)/100
+// }
+
+function hoursWorkedOnDate(empObj, date) {
+    const timeIn = (empObj.timeInEvents.find((item) => item.date === date)).hour;
+    const timeOut = (empObj.timeOutEvents.find(item => item.date === date)).hour;
+    return (timeOut - timeIn)/100  
+  }
 
 function wagesEarnedOnDate(empObj, date){
     let wagesPerHr = empObj.payPerHour;
@@ -95,14 +101,25 @@ function wagesEarnedOnDate(empObj, date){
     return wagesPerHr * hrs
 }
 
-function allWagesFor (empObj){
 
-}
+const allWagesFor = (record) => {
+    return record.timeInEvents.reduce(
+      (accumulator, timeInEvent) => accumulator + wagesEarnedOnDate(record, timeInEvent.date), 0)
+  }
+  
+const calculatePayroll = (employeesRecord) => {
+    return employeesRecord.reduce(
+      (accumulator, employees) => accumulator + allWagesFor(employees), 0)
+  }
+
+// function allWagesFor (empObj){
+
+// }
 
 
-function calculatePayroll (empArray){
+// function calculatePayroll (empArray){
 
-}
+// }
 
 
 
